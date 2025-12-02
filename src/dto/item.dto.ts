@@ -1,11 +1,9 @@
-export interface CreateItemDto {
+export interface CreateItemDTO {
   name: string;
-  price: number;
   quantity: number;
 }
 
-export interface UpdateItemDto {
+export interface UpdateItemDTO {
   name?: string;
-  price?: number;
   quantity?: number;
 }

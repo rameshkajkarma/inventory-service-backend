@@ -1,24 +1,24 @@
-import { Item } from "../models/item.model";
-import { CreateItemDto, UpdateItemDto } from "../dto/item.dto";
+import { ItemModel } from "../models/item.model";
+import { CreateItemDTO, UpdateItemDTO } from "../dto/item.dto";
 
-export class ItemService {
-  async createItem(data: CreateItemDto) {
-    return await Item.create(data);
-  }
+export const itemService = {
+  async create(data: CreateItemDTO) {
+    return await ItemModel.create(data);
+  },
 
-  async getAllItems() {
-    return await Item.find();
-  }
+  async getAll() {
+    return await ItemModel.find();
+  },
 
-  async getItemById(id: string) {
-    return await Item.findById(id);
-  }
+  async getById(id: string) {
+    return await ItemModel.findById(id);
+  },
 
-  async updateItem(id: string, data: UpdateItemDto) {
-    return await Item.findByIdAndUpdate(id, data, { new: true });
-  }
+  async update(id: string, data: UpdateItemDTO) {
+    return await ItemModel.findByIdAndUpdate(id, data, { new: true });
+  },
 
-  async deleteItem(id: string) {
-    return await Item.findByIdAndDelete(id);
-  }
-}
+  async delete(id: string) {
+    return await ItemModel.findByIdAndDelete(id);
+  },
+};

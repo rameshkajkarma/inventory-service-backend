@@ -1,52 +1,36 @@
 import { Request, Response } from "express";
-import { ItemService } from "../services/item.service";
-import { successResponse, errorResponse } from "../utils/response";
+import { itemService } from "../services/item.service";
 
-const service = new ItemService();
-
-export class ItemController {
+export const itemController = {
   async create(req: Request, res: Response) {
     try {
-      const item = await service.createItem(req.body);
-      return successResponse(res, item, "Item created successfully");
+      const item = await itemService.create(req.body);
+      res.status(201).json(item);
     } catch (err) {
-      return errorResponse(res, err);
+      res.status(400).json({ message: "Create failed", error: err });
     }
-  }
+  },
 
-  async findAll(req: Request, res: Response) {
-    try {
-      const items = await service.getAllItems();
-      return successResponse(res, items, "Items fetched successfully");
-    } catch (err) {
-      return errorResponse(res, err);
-    }
-  }
+  async getAll(_req: Request, res: Response) {
+    const items = await itemService.getAll();
+    res.json(items);
+  },
 
-  async findOne(req: Request, res: Response) {
-    try {
-      const item = await service.getItemById(req.params.id);
-      return successResponse(res, item, "Item fetched");
-    } catch (err) {
-      return errorResponse(res, err);
-    }
-  }
+  async getById(req: Request, res: Response) {
+    const item = await itemService.getById(req.params.id);
+    if (!item) return res.status(404).json({ message: "Item not found" });
+    res.json(item);
+  },
 
   async update(req: Request, res: Response) {
-    try {
-      const item = await service.updateItem(req.params.id, req.body);
-      return successResponse(res, item, "Item updated");
-    } catch (err) {
-      return errorResponse(res, err);
-    }
-  }
+    const updated = await itemService.update(req.params.id, req.body);
+    if (!updated) return res.status(404).json({ message: "Item not found" });
+    res.json(updated);
+  },
 
   async delete(req: Request, res: Response) {
-    try {
-      await service.deleteItem(req.params.id);
-      return successResponse(res, null, "Item deleted");
-    } catch (err) {
-      return errorResponse(res, err);
-    }
-  }
-}
+    const deleted = await itemService.delete(req.params.id);
+    if (!deleted) return res.status(404).json({ message: "Item not found" });
+    res.json({ message: "Item deleted" });
+  },
+};
